@@ -1,0 +1,14 @@
+name: lix
+version: 0.0.1
+
+readme: README.md
+
+description: |
+  Lix is a small but robust Lisp
+
+repository: https://github.com/oraqlle/lix
+
+license: MIT
+
+authors:
+  - Tyler Swann <tyler.swann05@gmail.com>
