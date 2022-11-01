@@ -4,9 +4,9 @@
 #include <functional>
 #include <vector>
 
-#include <types/env.hxx>
-#include <types/qexpr.hxx>
-#include <types/expr.hxx>
+#include <core/types/env.hxx>
+#include <core/types/qexpr.hxx>
+#include <core/types/expr.hxx>
 
 namespace lix::core::types
 {

@@ -1,7 +1,7 @@
 #ifndef LIX_MATCH
 #   define LIX_MATCH
 
-namespace lix::core
+namespace lix::core::utils
 {
     template<typename... Ms>
     struct match : Ms...

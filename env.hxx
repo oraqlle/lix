@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include <types/expr.hxx>
-#include <types/symbol.hxx>
+#include <core/types/expr.hxx>
+#include <core/types/symbol.hxx>
 
 namespace lix::core::types
 {

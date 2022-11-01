@@ -4,7 +4,7 @@
 #include <utility>
 
 #include <catch2/catch.hpp>
-#include <types/data.hxx>
+#include <core/types/types.hxx>
 
 using namespace std::literals;
 using lix::core::types::Data;
