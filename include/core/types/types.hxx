@@ -29,6 +29,9 @@ namespace lix::core::types
     /// Environment Type
     class Env;
 
+    /// Expr Type
+    class Expr;
+
     /// Value Type
     class Value;
 
