@@ -7,16 +7,16 @@ using lix::core::types::Value;
 
 namespace lix::core::io
 {
-    void print(const Value& val);
+    void print(const std::shared_ptr<Value>& val);
 
 
-    void println(const Value& val);
+    void println(const std::shared_ptr<Value>& val);
 
 
-    void print_expr(const Value& val, char open, char close);
+    void print_expr(const std::shared_ptr<Value>& val, char open, char close);
 
 
-    void print_str(const Value& val);
+    void print_str(const std::shared_ptr<Value>& val);
 }
 
 #endif  /// LIX_IO

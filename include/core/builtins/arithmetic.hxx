@@ -5,11 +5,12 @@
 
 using lix::core::types::Value;
 using lix::core::types::Env;
-using lix::core::types::Builtin;
 
 namespace lix::core::func
 {
-    Value add = [](Env, Value){ }
+    Value builtin_op(const Env& env, Value& arg, const Value& op);
+
+    Value add(const Env& env, Value& val);
 }
 
 #endif  /// LIX_ARITHMETIC

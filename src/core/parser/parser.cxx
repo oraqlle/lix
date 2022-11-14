@@ -1,11 +1,15 @@
+#include <core/utils/match.hxx>
 #include <core/parser/parser.hxx>
+
+#include <core/types/types.hxx>
+#include <core/types/value.hxx>
 
 #include <errno.h>
 #include <optional>
 #include <string>
 #include <variant>
 
-using std::literals;
+using namespace std::literals;
 
 using lix::core::types::Value;
 using lix::core::types::Error;
@@ -16,11 +20,11 @@ using lix::core::utils::match;
 
 namespace lix::core::parser
 {
-    Value read_expr(std::string str, int& i, char endl)
+    Value read_expr(const std::string& str, int& i, char endl)
     {
         Value x = (endl == '}') ? Qexpr{} : Sexpr{};
 
-        while (s[i] != endl)
+        while (str[i] != endl)
         {
             Value y = read(str, i);
 
@@ -28,22 +32,22 @@ namespace lix::core::parser
                 [](const Error& err){ return err; },
                 [&](const Sexpr& expr)
                 {
-                    x.cells.insert(std::move(y));
+                    std::get<Sexpr>(x.value).cells.push_back(std::move(y));
                     return std::nullopt;
                 },
                 [&](const Qexpr& expr)
                 {
-                    x.cells.insert(std::move(y));
+                    std::get<Qexpr>(x.value).cells.push_back(std::move(y));
                     return std::nullopt;
                 },
                 [](const auto& other){ return std::nullopt; }
             });
 
             if (opt.has_value())
-                return *opt;            
+                return opt.value();            
         }
 
-        (i)++;
+        i++;
 
         return x;
     }

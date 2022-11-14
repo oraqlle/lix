@@ -3,8 +3,7 @@
 
 #include <core/types/types.hxx>
 
-#include <span>
-#include <vector>
+#include <deque>
 
 namespace lix::core::types
 {
@@ -17,7 +16,7 @@ namespace lix::core::types
         Expr& operator= (const Expr& expr)      = default;
         Expr& operator= (Expr&& expr)           = default;
 
-        std::vector<Value> cells;
+        std::deque<Value> cells;
     };
 
     class Sexpr

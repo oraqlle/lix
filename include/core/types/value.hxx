@@ -32,12 +32,12 @@ namespace lix::core::types
                                   >;
 
     public:
-        Value ()                                = delete;
+        Value ()                               = delete;
 
-        Value (const Value& value)              = default;
-        Value (Value&& value)                   = default;
-        Value& operator= (const Value& value)   = default;
-        Value& operator= (Value&& value)        = default;
+        Value (const Value& value)             = default;
+        Value (Value&& value)                  = default;
+        Value& operator= (const Value& value)  = default;
+        Value& operator= (Value&& value)       = default;
 
         explicit Value(std::monostate&& mon)
         : value{mon}
@@ -81,16 +81,16 @@ namespace lix::core::types
 
         std::string name() const
         {
-            using std::literals;
+            using namespace std::literals;
 
             return std::visit(match {
-                [](const Int& num){ return "Int"s; }
-                [](const Float& num){ return "Float"s; }
-                [](const String& num){ return "String"s; }
-                [](const Error& num){ return "Error"s; }
-                [](const Symbol& num){ return "Symbol"s; }
-                [](const Builtin& num){ return "Function (built-in)"s; }
-                [](const Sexpr& num){ return "S-expression"s; }
+                [](const Int& num){ return "Int"s; },
+                [](const Float& num){ return "Float"s; },
+                [](const String& num){ return "String"s; },
+                [](const Error& num){ return "Error"s; },
+                [](const Symbol& num){ return "Symbol"s; },
+                [](const Builtin& num){ return "Function (built-in)"s; },
+                [](const Sexpr& num){ return "S-expression"s; },
                 [](const Qexpr& num){ return "Q-expression"s; }
             }, this->value);
         }
@@ -98,7 +98,6 @@ namespace lix::core::types
     public:
         Type value;
         std::optional<Env> env;
-        std::vector<Value> cells;
     };
 }
 
