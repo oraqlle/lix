@@ -7,8 +7,11 @@
 #include <variant>
 #include <vector>
 
-#include <core/types/types.hxx>
+#include <core/env/env.hxx>
+
 #include <core/types/expr.hxx>
+#include <core/types/types.hxx>
+
 #include <core/utils/match.hxx>
 
 using lix::core::utils::match;

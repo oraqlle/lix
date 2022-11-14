@@ -12,6 +12,5 @@
 #include <core/types/value.hxx>
 
 #include <core/utils/match.hxx>
-#include <core/utils/readline.hxx>
 
 #endif  /// LIX
