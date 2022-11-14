@@ -2,13 +2,13 @@
 #   define LIX_PRINT
 
 #include <core/types/types.hxx>
+#include <core/types/expr.hxx>
 #include <core/utils/match.hxx>
 
 using lix::core::types::None;
 using lix::core::types::Expr;
 using lix::core::types::Symbol;
 using lix::core::types::Sexpr;
-using lix::core::types::Function;
 using lix::core::types::Cell;
 
 using lix::core::utils::match;

@@ -1,182 +1,129 @@
-#include <core/utils/match.hxx>
-#include <core/parser/parser.hxx>
-
+#include <core/io/parser.hxx>
 #include <core/types/types.hxx>
+#include <core/types/expr.hxx>
+#include <core/utils/match.hxx>
 
-#include <errno.h>
 #include <optional>
-#include <string>
+#include <string_view>
+#include <tuple>
+#include <utility>
 #include <variant>
 
 using namespace std::literals;
 
-
+using lix::core::types::Cell;
+using lix::core::types::Error;
+using lix::core::types::Expr;
+using lix::core::types::None;
+using lix::core::types::Sexpr;
+using lix::core::types::Symbol;
 
 using lix::core::utils::match;
 
 namespace lix::core::io
 {
-    Value read_expr(const std::string& str, int& i, char endl)
+    std::pair<Expr, std::size_t> read_expr(std::string_view str, char endl)
     {
-        Value x = (endl == '}') ? Qexpr{} : Sexpr{};
+        Expr xexpr = Sexpr{};
+        auto i = {0uL};
 
         while (str[i] != endl)
         {
-            Value y = read(str, i);
+            std::tie(yexpr, i) = read(s.substr(i));
+            i = ni;
 
-            std::optional<Value> opt = std::visit(match{
-                [](const Error& err){ return err; },
-                [&](const Sexpr& expr)
-                {
-                    std::get<Sexpr>(x.value).cells.push_back(std::move(y));
-                    return std::nullopt;
-                },
-                [&](const Qexpr& expr)
-                {
-                    std::get<Qexpr>(x.value).cells.push_back(std::move(y));
-                    return std::nullopt;
-                },
-                [](const auto& other){ return std::nullopt; }
-            });
-
-            if (opt.has_value())
-                return opt.value();            
+            if (std::holds_alternative<Error>(yexpr.cell))
+                return std::make_pair(yexpr, i);
+            else
+                std::get<Sexpr>(xexpr.cell).push_pack(std::move(yexpr));
         }
 
         i++;
 
-        return x;
+        return std::make_pair(xexpr, i);
     }
 
 
-    Value read(std::string str, int& i)
+    std::pair<Expr, std::size_t> read(std::string_view str)
     {
-        while (strchr(" \t\v\r\n;", s[i]) && s[i] != '\0')
+        auto i = {0uL};
+        while (strchr(" \t\v\r\n;", str[i]) && str[i] != '\0')
         {
-            if (s[i] == ';')
-                while (s[i] != '\n' && s[i] != '\0')
+            if (str[i] == ';')
+                while (str[i] != '\n' && str[i] != '\0')
                     i++;
-
             i++;
         }
 
-        Value x = std::monostate;
+        Expr xexpr = None{};
 
-        if (s[i] == '\0')
-            return Error{"Unexpected end of input"};
-        else if (s[i] == '(')
+        if (str[i] == '\0')
+            return std::make_pair(Error{"Unexpected end of input"}, i);
+        else if (str[i] == '(')
         {
-            (i)++;
-            x = read_expr(s, i, ')');
-        }
-        else if (s[i] == '{')
-        {
-            (i)++;
-            x = read_expr(s, i, '}');
+            i++;
+            std::tie(xexpr, i) = read_expr(str.substr(i), ')');
         }
         else if (strchr(
                 "abcdefghijklmnopqrstuvwxyz"
                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                "0123456789_+-*\\/=<>!&", s[i]))
-            x = read_sym(s, i);
-        else if (strchr("\"", s[i]))
-            x = read_str(s, i);
+                "0123456789_+-*\\/=<>!&", str[i]))
+            std::tie(xexpr, i) = read_sym(str.substr(i));
         else
-            x = Error{"Unexpected character "s + s[i]};
+            std::tie(xexpr, i) = Error{"Unexpected character "s + str[i]};
 
-        while (strchr(" \t\v\r\n", s[i]) && s[i] != '\0')
+        while (strchr(" \t\v\r\n", str[i]) && str[i] != '\0')
         {
-            if (s[i] == ';')
-                while (s[i] != '\n' && s[i] != '\0')
-                    (i)++;
-
-            (i)++;
+            if (str[i] == ';')
+                while (str[i] != '\n' && str[i] != '\0')
+                    i++;
+            i++;
         }
 
-        return x;
+        return std::make_pair(xexpr, i);
     }
 
 
-    Value read_str(std::string str, int& i)
+    std::pair<Expr, std::size_t> read_sym(std::string_view str)
     {
-        std::string part = {""};
-
-        (i)++;
-
-        while (s[i] != '"')
-        {
-            char c = s[i];
-
-            if (c == '\0')
-            {
-                return Error{"Unexpected end of input"};
-            }
-
-            if (c == '\\')
-            {
-                (i)++;
-
-                if (strchr("abfnrtv\\\'\"", s[i]))
-                    c = str_unescape(s[i]);
-                else
-                {
-                    return Error{"Invalid escape sequence \\"s + s[i]};
-                }
-            }
-
-            
-            part += c;
-            part += '\0';
-            (i)++;
-        }
-
-        (i)++;
-
-        Value x = String{part};
-
-        return x;
-    }
-
-
-    Value read_sym(std::string str, int& i)
-    {
-        std::string part = {""};
+        std::string part = "";
+        auto i = {0uL};
 
         while (strchr(
             "abcdefghijklmnopqrstuvwxyz"
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            "0123456789_+-*\\/=<>!&", s[i]) && s[i] != '\0')
+            "0123456789_+-*\\/=<>!&", str[i]) && str[i] != '\0')
         {
             
-            part += s[i];
+            part += str[i];
             part += '\0';
             i++;
         }
 
         int is_num = strchr("-0123456789", part[0]) != NULL;
 
-        for (int j = 1; j < strlen(part); j++)
-            if (strchr("0123456789", part[j]) == NULL)
+        for (char& chr : part)
+            if (strchr("0123456789", chr) == NULL)
             {
                 is_num = 0;
                 break;
             }
 
-        if (strlen(part) == 1 && part[0] == '-')
+        if (part.size() == 1 && part[0] == '-')
             is_num = 0;
 
-        Value x = std::monostate;
+        Expr xexpr = None{};
 
         if (is_num)
         {
             errno = 0;
-            long v = strtoi(part, NULL, 10);
-            x = (errno != ERANGE) ? Int{v} : Error{"Invalid Number "s + part};
+            auto v = strtoi(part, NULL, 10);
+            xexpr = (errno != ERANGE) ? Int{v} : Error{"Invalid Number "s + part};
         }
         else
-            x = Symbol{part};
+            xexpr = Symbol{part};
 
-        return x;
+        return std::make_pair(xexpr, i);
     }
 
 

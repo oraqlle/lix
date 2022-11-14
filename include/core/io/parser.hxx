@@ -2,24 +2,22 @@
 #   define LIX_PARSER
 
 #include <core/types/types.hxx>
+#include <core/types/expr.hxx>
 
-#include <string>
+#include <string_view>
 
-using lix::core::types::Value;
+using lix::core::types::Expr;
 
-namespace lix::core::parser
+namespace lix::core::io
 {
 
-    Value lval_read_expr(std::string str, int& i, char endl);
+    std::pair<Expr, std::size_t> read_expr(std::string_view str, char endl);
 
 
-    Value lval_read(std::string str, int& i);
+    std::pair<Expr, std::size_t> read(std::string_view str);
 
 
-    Value read_str(std::string str, int& i);
-
-
-    Value read_sym(std::string str, int& i);
+    std::pair<Expr, std::size_t> read_sym(std::string_view str);
 
 
     char str_unescape(char x);

@@ -18,8 +18,8 @@ namespace lix::core::types
     class Expr;
 
     /// Error Type
-    // class Error 
-    // : public std::string {};
+    class Error 
+    : public std::string {};
 
     /// Symbol Type
     class Symbol
@@ -44,7 +44,7 @@ namespace lix::core::types
     // class Lambda;
 
     /// Cell Type
-    using Cell = std::variant<None, Int, Symbol, Expr>;
+    using Cell = std::variant<None, Int, Error, Symbol, Expr>;
 }
 
 #endif  /// LIX_TYPES
