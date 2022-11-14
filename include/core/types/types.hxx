@@ -12,8 +12,6 @@ namespace lix::core::types
     using Float         = double;
     using String        = std::string;
 
-    using Data          = std::variant<Int, Float, String>;
-
     /// Error Type
     class Error 
     : public std::string {};
@@ -23,17 +21,19 @@ namespace lix::core::types
     : std::string {};
 
     /// Comment Type
-    class Comment
-    : std::string {};
+    struct Comment {};
 
-    /// Environment Type
-    class Env;
+    /// S-Expression Type
+    class Sexpr;
 
-    /// Expr Type
-    class Expr;
+    /// Q-Expression Type
+    class Qexpr;
 
     /// Value Type
     class Value;
+
+    /// Environment Type
+    class Env;
 
     /// Builtin Function Type
     using Builtin       = std::function<Value(Env, Value)>;

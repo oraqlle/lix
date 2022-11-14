@@ -1,6 +1,11 @@
 compiler_id: 'gnu'
-c_compiler: 'gcc-11'
-cxx_compiler: 'g++-11'
+c_compiler: 'gcc'
+cxx_compiler: 'g++'
 
 c_version: 'c18'
-cxx_version: 'c++20'
+cxx_version: 'c++17'
+
+link_flags: [
+  'ledit',
+  'lm'
+]
