@@ -1,15 +1,11 @@
 #ifndef LIX
 #   define LIX
 
-#include <core/env/env.hxx>
+#include <core/io/print.hxx>
+#include <core/io/parser.hxx>
 
-#include <core/io/io.hxx>
-
-#include <core/parser/parser.hxx>
-
-#include <core/types/expr.hxx>
 #include <core/types/types.hxx>
-#include <core/types/value.hxx>
+#include <core/types/expr.hxx>
 
 #include <core/utils/match.hxx>
 

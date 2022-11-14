@@ -2,44 +2,49 @@
 #   define LIX_TYPES
 
 #include <functional>
+#include <memory>
 #include <string>
 #include <variant>
 
 namespace lix::core::types
 {
     /// Primitive Data types
+    using None          = std::monostate;
     using Int           = int;
-    using Float         = double;
-    using String        = std::string;
+    // using Float         = double;
+    // using String        = std::string;
+
+    /// Expr Type
+    class Expr;
 
     /// Error Type
-    class Error 
-    : public std::string {};
+    // class Error 
+    // : public std::string {};
 
     /// Symbol Type
     class Symbol
     : std::string {};
 
     /// Comment Type
-    struct Comment {};
+    // struct Comment {};
 
     /// S-Expression Type
-    class Sexpr;
+    using Sexpr = std::vector<std::unique_ptr<Expr>>;
 
     /// Q-Expression Type
-    class Qexpr;
-
-    /// Value Type
-    class Value;
+    // class Qexpr;
 
     /// Environment Type
-    class Env;
+    // class Env;
 
     /// Builtin Function Type
-    using Builtin       = std::function<Value(Env, Value)>;
+    // using Function = std::function<Expr(Expr)>;
 
     /// Lambda Type
-    class Lambda;
+    // class Lambda;
+
+    /// Cell Type
+    using Cell = std::variant<None, Int, Symbol, Expr>;
 }
 
 #endif  /// LIX_TYPES

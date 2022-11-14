@@ -3,29 +3,26 @@
 
 #include <core/types/types.hxx>
 
-#include <deque>
+#include <core/utils/match.hxx>
+
+#include <string>
+#include <utility>
+
+using lix::core::types::Cell;
+using lix::core::utils::match;
 
 namespace lix::core::types
 {
     class Expr
     {
     public:
-        Expr ()                                 = default;
-        Expr (const Expr& expr)                 = default;
-        Expr (Expr&& expr)                      = default;
-        Expr& operator= (const Expr& expr)      = default;
-        Expr& operator= (Expr&& expr)           = default;
+        explicit Expr(Cell&& cell)
+        : cell{std::move(cell)}
+        {}
 
-        std::deque<Value> cells;
+    public:
+        Cell cell;
     };
-
-    class Sexpr
-    : public Expr
-    {};
-
-    class Qexpr
-    : public Expr
-    {};
 }
 
 #endif  /// LIX_EXPR

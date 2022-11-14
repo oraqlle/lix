@@ -2,7 +2,6 @@
 #include <core/parser/parser.hxx>
 
 #include <core/types/types.hxx>
-#include <core/types/value.hxx>
 
 #include <errno.h>
 #include <optional>
@@ -11,14 +10,11 @@
 
 using namespace std::literals;
 
-using lix::core::types::Value;
-using lix::core::types::Error;
-using lix::core::types::Sexpr;
-using lix::core::types::Qexpr;
+
 
 using lix::core::utils::match;
 
-namespace lix::core::parser
+namespace lix::core::io
 {
     Value read_expr(const std::string& str, int& i, char endl)
     {
