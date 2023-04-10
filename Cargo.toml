@@ -5,10 +5,11 @@ authors = ["oraqlle <tyler.swann05@gmail.com>"]
 edition = "2021"
 
 [dependencies]
+rustyline = "11.0.0"
 
-[lib]
-name = "lix"
-path = "src/lib/lix.rs"
+# [lib]
+# name = "lix"
+# path = "src/lib/lix.rs"
 
 [[bin]]
 name = "lix"
